@@ -14,7 +14,10 @@ var vidi = function (canvas) {
 };
 
 vidi.getImageData = function () {
-	return this.ctx.getImageData(0, 0, this.width, this.height);
+	if (!this.imageData) {
+		this.imageData = this.ctx.getImageData(0, 0, this.width, this.height);	
+	}
+	return this.imageData;
 };
 
 vidi.invert = function () {
@@ -30,7 +33,6 @@ vidi.invert = function () {
 		}
 	}
 	
-	this.imageData = imageData;
 	return this;
 };
 
