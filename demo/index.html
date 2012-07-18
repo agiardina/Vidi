@@ -1,0 +1,31 @@
+<!doctype>
+
+<html>
+<head>
+	<script src="../src/vidi.js"></script>
+	<script>
+function load(path) {
+	var canvas = document.getElementById('canvas'),
+		ctx = canvas.getContext('2d'),
+		img = new Image();
+		
+	img.onload = function () {
+	    canvas.width = img.width;
+	    canvas.height = img.height;
+    	ctx.drawImage(img, 0, 0, img.width, img.height);	
+    	
+		vidi(canvas).invert().show(target);
+	};
+	
+	img.src = path;
+	
+}
+	</script>
+</head>
+
+<body onload="load('samples/paradise.jpg')">
+	<canvas id="canvas"></canvas>
+	<canvas id="target"></canvas>
+</body>
+
+</html>
