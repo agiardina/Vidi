@@ -6,6 +6,7 @@
 	<script>
 function load(path) {
 	var canvas = document.getElementById('canvas'),
+		target = document.getElementById('target'),
 		ctx = canvas.getContext('2d'),
 		img = new Image();
 		
@@ -14,7 +15,9 @@ function load(path) {
 	    canvas.height = img.height;
     	ctx.drawImage(img, 0, 0, img.width, img.height);	
     	
-		vidi(canvas).invert().show(target);
+		vidi(canvas, function () {
+			this.threshold(1).show(target);
+		});
 	};
 	
 	img.src = path;

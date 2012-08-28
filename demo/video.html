@@ -1,0 +1,21 @@
+<!doctype>
+
+<html>
+<head>
+	<script src="../src/vidi.js"></script>
+	<script>
+function load(path) {
+	var video = document.getElementById('video');
+	vidi(video,function () {
+		this.threshold(100).show(target);
+	});
+}
+	</script>
+</head>
+
+<body onload="load()">
+	<video id="video" src="samples/video.mov" autoplay controls></video>
+	<canvas id="target"></canvas>
+</body>
+
+</html>
