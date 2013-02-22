@@ -131,7 +131,7 @@ vidi.brightness = function (factor) {
 		data = imageData.data,
 		len = imageData.data.length,
 		i;		
-	
+	factor = +factor;	
 	for (i=0;i<len-4;i=i+4) {
 		data[i] += factor;
 		data[i+1] += factor;
@@ -191,6 +191,8 @@ vidi.flush = function () {
 
 //Target
 vidi.show = function (target) {
+	if (!this.imageData) return;
+
 	if (target) {
 		target.width = this.imageData.width;
 		target.height = this.imageData.height;

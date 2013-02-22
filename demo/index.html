@@ -3,6 +3,7 @@
 <html>
 <head>
 	<script src="../src/vidi.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>
 function load(path) {
 	var canvas = document.getElementById('canvas'),
@@ -15,19 +16,68 @@ function load(path) {
 	    canvas.height = img.height;
     	ctx.drawImage(img, 0, 0, img.width, img.height);	
     	
-		vidi(canvas, function () {
+		/*vidi(canvas, function () {
 			this.autoContrast().show(target);
-		});
+		});*/
 	};
 	
 	img.src = path;	
 }
+
+function doIt() {
+	var canvas = document.getElementById('canvas');
+	var target = document.getElementById('target');
+	console.log('doing');
+
+	vidi(canvas,function () {
+		var that = this;
+		$('.filtercheck:checked').each(function () {
+			var action = $(this).attr('id');
+			var fn = that[action];
+			var params = [];
+			params.push($('#' + action + '_param1').val());
+			params.push($('#' + action + '_param2').val());
+			params.push($('#' + action + '_param3').val());
+			console.log(params);
+			fn.apply(that,params)
+		})
+		that.show(target);
+	});
+}
+
+$(function () {
+	$('.filtercheck').on('click', doIt);
+	$('.paramchange').on('change', doIt);
+});
 	</script>
 </head>
 
-<body onload="load('samples/piatto.jpg')">
-	<canvas id="canvas"></canvas>
-	<canvas id="target"></canvas>
+<body onload="load('samples/paradise.jpg')">
+	<div><canvas id="canvas"></canvas>
+	<canvas id="target"></canvas></div>
+	<div>
+		<div>
+			<label> Invert <input type="checkbox" class="filtercheck" id="invert" /></label>
+		</div>
+		<div>
+			<label> Autocontrast <input type="checkbox" class="filtercheck" id="autoContrast" /></label>
+		</div>			
+		<div>
+			<label> Contrast <input type="checkbox" class="filtercheck" id="contrast" /></label>
+			<label> Contrast level (0.1-10) <input type="range" class="paramchange" id="contrast_param1" value="2" min="0.1" max="10" step="0.1"/></label>
+		</div>	
+		<div>
+			<label> Brightness <input type="checkbox" class="filtercheck" id="brightness" /></label>
+			<label> Brightness level (-255 to 255) <input type="range" class="paramchange" id="brightness_param1"  min="-255" max="255" value="100"/></label>
+		</div>			
+		<div>
+			<label> Grayscale <input type="checkbox" class="filtercheck" id="toGray" /></label>
+		</div>
+		<div>
+			<label> Threshold <input type="checkbox" class="filtercheck" id="threshold" /></label>
+			<label> Threshold level (1-255) <input type="range" class="paramchange" id="threshold_param1"  min="1" max="255" value="128"/></label>
+		</div>
+	</div>
 </body>
 
 </html>
