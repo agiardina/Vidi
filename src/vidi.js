@@ -23,7 +23,7 @@ var vidi = function (source, handler) {
 			
 			setInterval(function () {
 				ctx.drawImage(source,0,0);
-			},41)
+			},41);
 			
 		},
 		 
@@ -83,6 +83,46 @@ vidi.contrast = function (factor) {
 		}
 	}
 	
+	return this;
+};
+
+vidi.autoContrast = function () {
+	var imageData = this.getImageData(),
+		data = imageData.data,
+		len = imageData.data.length,
+		i,
+		lowR = 255, highR = 0,
+		lowG = 255, highG = 0,
+		lowB = 255, highB = 0,
+		rFact,gFact,bFact;
+		
+	for (i=0;i<len-4;i=i+4) {
+		r = data[i];	
+		g = data[i+1];	
+		b = data[i+2];
+		if (r < lowR) lowR = r;
+		if (r > highR) highR = r;
+		if (g < lowG) lowG = g;
+		if (g > highG) highG = g;
+		if (b < lowB) lowB = b;
+		if (b > highB) highB = b;
+	}
+	
+	rFact = 255 / (highR-lowR);
+	gFact = 255 / (highG-lowG);
+	bFact = 255 / (highB-lowB);
+	
+	for (i=0;i<len-4;i=i+4) {
+		r = data[i];	
+		g = data[i+1];	
+		b = data[i+2];
+		
+		data[i] = (r - lowR) * rFact;
+		data[i+1] = (g - lowG) * gFact;
+		data[i+2] = (b - lowB) * bFact;
+	}	
+	
+			
 	return this;
 };
 

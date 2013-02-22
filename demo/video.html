@@ -4,17 +4,22 @@
 <head>
 	<script src="../src/vidi.js"></script>
 	<script>
-function load(path) {
+function test(path) {
 	var video = document.getElementById('video');
+	var target = document.getElementById('target');
+	
+
+	//video.style.display = 'none';
+	
 	vidi(video,function () {
-		this.threshold(100).show(target);
+		this.brightness(-20).contrast(1.4).show(target);
 	});
 }
 	</script>
 </head>
 
-<body onload="load()">
-	<video id="video" src="samples/video.mov" autoplay controls></video>
+<body>
+	<video id="video" src="samples/video.mov" autoplay controls oncanplay="test()"></video>
 	<canvas id="target"></canvas>
 </body>
 

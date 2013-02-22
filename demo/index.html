@@ -16,17 +16,16 @@ function load(path) {
     	ctx.drawImage(img, 0, 0, img.width, img.height);	
     	
 		vidi(canvas, function () {
-			this.threshold(1).show(target);
+			this.autoContrast().show(target);
 		});
 	};
 	
-	img.src = path;
-	
+	img.src = path;	
 }
 	</script>
 </head>
 
-<body onload="load('samples/paradise.jpg')">
+<body onload="load('samples/piatto.jpg')">
 	<canvas id="canvas"></canvas>
 	<canvas id="target"></canvas>
 </body>
