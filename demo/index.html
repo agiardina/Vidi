@@ -1,83 +1,289 @@
-<!doctype>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<script src="../src/vidi.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>
-function load(path) {
-	var canvas = document.getElementById('canvas'),
-		target = document.getElementById('target'),
-		ctx = canvas.getContext('2d'),
-		img = new Image();
-		
-	img.onload = function () {
-	    canvas.width = img.width;
-	    canvas.height = img.height;
-    	ctx.drawImage(img, 0, 0, img.width, img.height);	
-    	
-		/*vidi(canvas, function () {
-			this.autoContrast().show(target);
-		});*/
-	};
-	
-	img.src = path;	
-}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-function doIt() {
-	var canvas = document.getElementById('canvas');
-	var target = document.getElementById('target');
-	console.log('doing');
+    <title>Theme Template for Bootstrap</title>
 
-	vidi(canvas,function () {
-		var that = this;
-		$('.filtercheck:checked').each(function () {
-			var action = $(this).attr('id');
-			var fn = that[action];
-			var params = [];
-			params.push($('#' + action + '_param1').val());
-			params.push($('#' + action + '_param2').val());
-			params.push($('#' + action + '_param3').val());
-			console.log(params);
-			fn.apply(that,params)
-		})
-		that.show(target);
-	});
-}
+    <!-- Bootstrap core CSS -->
+    <link href="vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="vendors/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="vendors/bootstrap-slider.min.css" rel="stylesheet">
 
-$(function () {
-	$('.filtercheck').on('click', doIt);
-	$('.paramchange').on('change', doIt);
-});
-	</script>
+    <style>
+
+        html,
+        body,
+        .container-fluid,
+        .container-fluid > .row{
+            height: 100%;
+        }
+
+        .container-fluid {
+            margin-top: 50px;
+        }
+
+        #sidebar {
+            height: 100%;
+        }
+
+        .panel {
+            margin-top: 20px;
+        }
+
+    </style>
 </head>
 
-<body onload="load('samples/paradise.jpg')">
-	<div><canvas id="canvas"></canvas>
-	<canvas id="target"></canvas></div>
-	<div>
-		<div>
-			<label> Invert <input type="checkbox" class="filtercheck" id="invert" /></label>
-		</div>
-		<div>
-			<label> Autocontrast <input type="checkbox" class="filtercheck" id="autoContrast" /></label>
-		</div>			
-		<div>
-			<label> Contrast <input type="checkbox" class="filtercheck" id="contrast" /></label>
-			<label> Contrast level (0.1-10) <input type="range" class="paramchange" id="contrast_param1" value="2" min="0.1" max="10" step="0.1"/></label>
-		</div>	
-		<div>
-			<label> Brightness <input type="checkbox" class="filtercheck" id="brightness" /></label>
-			<label> Brightness level (-255 to 255) <input type="range" class="paramchange" id="brightness_param1"  min="-255" max="255" value="100"/></label>
-		</div>			
-		<div>
-			<label> Grayscale <input type="checkbox" class="filtercheck" id="toGray" /></label>
-		</div>
-		<div>
-			<label> Threshold <input type="checkbox" class="filtercheck" id="threshold" /></label>
-			<label> Threshold level (1-255) <input type="range" class="paramchange" id="threshold_param1"  min="1" max="255" value="128"/></label>
-		</div>
-	</div>
-</body>
+<body role="document">
 
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Vidi.js Showcase</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">File <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" class="loadImage" data-src="samples/food.jpg">Load food.jpg</a></li>
+                        <li><a href="#" class="loadImage" data-src="samples/paradise.jpg">Load paradise.jpg</a></li>
+                        <li><a href="#" class="loadImage" data-src="samples/building.jpg">Load building.jpg</a></li>
+                        <li><a href="#" class="loadImage" data-src="samples/circle.png">Load circle.png</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Nav header</li>
+                        <li><a href="#">Separated link</a></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Point operations <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" class="actionInvert">Invert</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" data-toggle="modal" data-target="#modalContrast">Change contrast</a></li>
+                        <li><a href="#">Change brightness</a></li>
+                        <li><a href="#" class="actionAutoContrast">Autocontrast</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" class="actionToGray">To grayscale</a></li>
+                        <li><a href="#">Threesold</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Edge detection<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" class="actionSobel">Sobel</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setting <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="dropdown-header">Image panels</li>
+                        <li class="panel-menu two-panels-menu active"><a href="#" class="twoPanelsMenuLink">Two-panels view</a></li>
+                        <li class="panel-menu single-panel-menu"><a href="#" class="singlePanelMenuLink">Single-panel view</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+
+<div class="theme-showcase container-fluid" role="main">
+    <div class="row">
+        <div class="col-md-4 image-panel1-container">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Before</h3>
+                </div>
+                <div class="panel-body">
+                    <canvas id="src" src="samples/building.jpg" class="img-responsive"></canvas>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4 image-panel2-container">
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">After</h3>
+                </div>
+                <div class="panel-body">
+                    <canvas id="target" class="img-responsive"></canvas>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4 bg-warning" id="sidebar">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p><span>Contrast:</span> <b>-50%</b> <input type="text" class="slider" value="" id="slider-contrast" data-slider-min="-50" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-id="contrast" /> <b>100%</b></p>
+                    <hr>
+                    <p><span>Brightness: </span> <b>-150</b> <input type="text" class="slider" value="" id="slider-brightness" data-slider-min="-150" data-slider-max="150" data-slider-step="1" data-slider-value="0" data-slider-id="brightness" /> <b>150</b></p>
+                    <hr>
+                    <p class="text-right">
+                        <button type="button" class="btn btn-lg btn-warning">Cancel</button>
+                        <button type="button" class="btn btn-lg btn-primary">Save</button>
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Histogram</h3>
+                </div>
+                <div class="panel-body">
+                    <canvas id="lumHistogram" width="256" height="100" class="img-responsive"></canvas>
+                    <canvas id="rgbHistogram" width="256" height="100" class="img-responsive"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="vendors/jquery-1.11.1.min.js"></script>
+<script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendors/bootstrap-slider.min.js"></script>
+<script src="../src/vidi.js"></script>
+<script src="../src/vidi/utils.js"></script>
+<script src="../src/vidi/histogram.js"></script>
+<script src="../src/vidi/point.js"></script>
+<script src="../src/vidi/filters.js"></script>
+<script src="../src/vidi/edge.js"></script>
+<script>
+    $(function () {
+
+        function getTarget() {
+            if ($('.single-panel-menu').hasClass('active')) {
+                return document.getElementById('src');
+            } else {
+                return document.getElementById('target');
+            }
+
+        }
+
+        $(".slider").slider({});
+
+        $('.loadImage').on('click',function () {
+            var src = $(this).data('src'),
+                canvas = document.getElementById('src'),
+                target = document.getElementById('target'),
+                img = new Image();
+
+            img.src = src;
+            img.addEventListener('load',function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.getContext('2d').drawImage(img,0,0);
+
+                target.width = img.width;
+                target.height = img.height;
+                target.getContext('2d').drawImage(img,0,0);
+            });
+
+        });
+
+        $('.singlePanelMenuLink').on('click', function () {
+            $('.image-panel2-container').hide();
+            $('.image-panel1-container').removeClass('col-md-4');
+            $('.image-panel1-container').addClass('col-md-8');
+            $('.panel-menu').removeClass('active');
+            $(this).parent().addClass('active');
+        });
+
+        $('.twoPanelsMenuLink').on('click', function () {
+            $('.image-panel2-container').show();
+            $('.image-panel1-container').removeClass('col-md-8');
+            $('.image-panel1-container').addClass('col-md-4');
+            $('.panel-menu').removeClass('active');
+            $(this).parent().addClass('active');
+        });
+
+        $('.actionInvert').on('click',function () {
+            var vidiImg = new Vidi(document.getElementById('src')),
+                target = getTarget();
+
+            vidiImg.invert().show(target);
+        });
+
+        $('.actionAutoContrast').on('click',function () {
+            var vidiImg = new Vidi(document.getElementById('src')),
+                target = getTarget();
+
+            vidiImg.autoContrast().show(target);
+        });
+
+        $('.actionToGray').on('click',function () {
+            var vidiImg = new Vidi(document.getElementById('src')),
+                target = getTarget();
+
+            vidiImg.toGray().show(target);
+        });
+
+        $('.actionSobel').on('click',function () {
+            var vidiImg = new Vidi(document.getElementById('src')),
+                target = getTarget();
+
+            vidiImg.sobelEdgeDetect().show(target);
+
+            //vidiImg.contrast(1.5).toGray().customFilter([[-1,0,1],[-2,0,2],[-1,0,1]]).show(target);
+            //vidiImg.contrast(1.5).toGray().customFilter([[-1,-2,-1],[0,0,0],[1,2,1]]).show(target);
+        });
+
+        (function () {
+            var vidiImg,
+                target;
+
+            $('#slider-contrast').on('slideStart',function () {
+                target = getTarget();
+                vidiImg = new Vidi(document.getElementById('src'))
+                vidiImg.saveSnapshot();
+            });
+
+            $('#slider-contrast').on('slide',function () {
+                var factor = (+$(this).val() + 100) / 100,
+                    lumHistogramCanvas = document.getElementById('lumHistogram'),
+                    rgbHistogramCanvas = document.getElementById('rgbHistogram');
+
+
+                vidiImg.contrast(factor).show(target);
+
+                lumHistogramCanvas.width = lumHistogramCanvas.width;
+                rgbHistogramCanvas.width = rgbHistogramCanvas.width;
+
+                Vidi.showLuminanceHistogram(vidiImg.imageData,lumHistogramCanvas);
+
+                Vidi.showRedHistogram(vidiImg.imageData,rgbHistogramCanvas);
+                Vidi.showGreenHistogram(vidiImg.imageData,rgbHistogramCanvas);
+                Vidi.showBlueHistogram(vidiImg.imageData,rgbHistogramCanvas);
+
+                vidiImg.restoreSnapshot();
+            });
+        }());
+    });
+</script>
+</body>
 </html>
