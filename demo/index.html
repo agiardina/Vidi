@@ -25,8 +25,8 @@
             height: 100%;
         }
 
-        .container-fluid {
-            margin-top: 50px;
+        .container-fluid > .row > div{
+            padding-top: 50px;
         }
 
         #sidebar {
@@ -35,6 +35,17 @@
 
         .panel {
             margin-top: 20px;
+        }
+
+        body.edit {
+            background:#000;
+        }
+
+        .color-box {
+            width:50px;
+            height: 50px;
+            border:1px solid #000000;
+            display: inline-block;
         }
 
     </style>
@@ -64,6 +75,9 @@
                         <li><a href="#" class="loadImage" data-src="samples/food.jpg">Load food.jpg</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/paradise.jpg">Load paradise.jpg</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/building.jpg">Load building.jpg</a></li>
+                        <li><a href="#" class="loadImage" data-src="samples/lighthouse.jpg">Load lighthouse.jpg</a></li>
+                        <li><a href="#" class="loadImage" data-src="samples/boat.jpg">Load boat.jpg</a></li>
+                        <li><a href="#" class="loadImage" data-src="samples/mountains.jpg">Load mountains.jpg (big)</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/circle.png">Load circle.png</a></li>
                         <li class="divider"></li>
                         <li class="dropdown-header">Nav header</li>
@@ -76,8 +90,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#" class="actionInvert">Invert</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" data-toggle="modal" data-target="#modalContrast">Change contrast</a></li>
-                        <li><a href="#">Change brightness</a></li>
+                        <li><a href="#" class="contrastLink" data-toggle="collapse" data-target="#panel-contrast">Change contrast/brightness</a></li>
                         <li><a href="#" class="actionAutoContrast">Autocontrast</a></li>
                         <li class="divider"></li>
                         <li><a href="#" class="actionToGray">To grayscale</a></li>
@@ -89,6 +102,12 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Edge detection<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#" class="actionSobel">Sobel</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="panel-menu two-panels-menu"><a href="#" class="actionsStats">Number of colors</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -132,14 +151,14 @@
         </div>
         <div class="col-md-4 bg-warning" id="sidebar">
 
-            <div class="panel panel-default">
+            <div class="panel panel-default collapse" id="panel-contrast">
                 <div class="panel-body">
                     <p><span>Contrast:</span> <b>-50%</b> <input type="text" class="slider" value="" id="slider-contrast" data-slider-min="-50" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-id="contrast" /> <b>100%</b></p>
                     <hr>
                     <p><span>Brightness: </span> <b>-150</b> <input type="text" class="slider" value="" id="slider-brightness" data-slider-min="-150" data-slider-max="150" data-slider-step="1" data-slider-value="0" data-slider-id="brightness" /> <b>150</b></p>
                     <hr>
                     <p class="text-right">
-                        <button type="button" class="btn btn-lg btn-warning">Cancel</button>
+                        <button type="button" class="btn btn-lg btn-warning cancel"  data-toggle="collapse" data-target="#panel-contrast">Cancel</button>
                         <button type="button" class="btn btn-lg btn-primary">Save</button>
                     </p>
                 </div>
@@ -151,8 +170,26 @@
                     <h3 class="panel-title">Histogram</h3>
                 </div>
                 <div class="panel-body">
-                    <canvas id="lumHistogram" width="256" height="100" class="img-responsive"></canvas>
-                    <canvas id="rgbHistogram" width="256" height="100" class="img-responsive"></canvas>
+                    <canvas id="lumHistogram" width="256" height="100" class="img-responsive" style="width:100%;height: 100px"></canvas>
+                    <canvas id="rgbHistogram" width="256" height="100" class="img-responsive" style="width:100%;height: 100px"></canvas>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Colors</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="color-box" id="c0"></div>
+                    <div class="color-box" id="c1"></div>
+                    <div class="color-box" id="c2"></div>
+                    <div class="color-box" id="c3"></div>
+                    <div class="color-box" id="c4"></div>
+                    <div class="color-box" id="c5"></div>
+                    <div class="color-box" id="c6"></div>
+                    <div class="color-box" id="c7"></div>
+                    <div class="color-box" id="c8"></div>
+                    <div class="color-box" id="c9"></div>
                 </div>
             </div>
 
@@ -176,6 +213,9 @@
 <script>
     $(function () {
 
+        var vidiImg,
+            vidiImgTmp;
+
         function getTarget() {
             if ($('.single-panel-menu').hasClass('active')) {
                 return document.getElementById('src');
@@ -185,11 +225,8 @@
 
         }
 
-        $(".slider").slider({});
-
-        $('.loadImage').on('click',function () {
-            var src = $(this).data('src'),
-                canvas = document.getElementById('src'),
+        function loadImage(src) {
+            var canvas = document.getElementById('src'),
                 target = document.getElementById('target'),
                 img = new Image();
 
@@ -202,8 +239,35 @@
                 target.width = img.width;
                 target.height = img.height;
                 target.getContext('2d').drawImage(img,0,0);
-            });
 
+                vidiImg = new Vidi(canvas);
+                vidiImgTmp = new Vidi(canvas);
+                showHistograms(vidiImg.imageData);
+            });
+        }
+
+        function showHistograms(imageData) {
+            var lumHistogramCanvas = document.getElementById('lumHistogram'),
+                    rgbHistogramCanvas = document.getElementById('rgbHistogram');
+
+            lumHistogramCanvas.width = lumHistogramCanvas.width;
+            rgbHistogramCanvas.width = rgbHistogramCanvas.width;
+
+            Vidi.showLuminanceHistogram(imageData,lumHistogramCanvas);
+
+            Vidi.showRedHistogram(imageData,rgbHistogramCanvas);
+            Vidi.showGreenHistogram(imageData,rgbHistogramCanvas);
+            Vidi.showBlueHistogram(imageData,rgbHistogramCanvas);
+        }
+
+        function updateHistograms() {
+            showHistograms(vidiImg.imageData);
+        }
+
+        $(".slider").slider({});
+
+        $('.loadImage').on('click',function () {
+            loadImage($(this).data('src'));
         });
 
         $('.singlePanelMenuLink').on('click', function () {
@@ -222,67 +286,90 @@
             $(this).parent().addClass('active');
         });
 
-        $('.actionInvert').on('click',function () {
-            var vidiImg = new Vidi(document.getElementById('src')),
-                target = getTarget();
+        $('.contrastLink').on('click',function () {
+            $('body').addClass('edit');
+            $('.navbar-fixed-top').fadeOut();
+        });
 
-            vidiImg.invert().show(target);
+        $('#panel-contrast .cancel').on('click', function () {
+            $('body').removeClass('edit');
+            $('.navbar-fixed-top').fadeIn();
+            vidiImg.imageData = vidiImgTmp.imageData;
+            vidiImg.show(getTarget());
+            updateHistograms();
+        });
+
+
+        $('.actionInvert').on('click',function () {
+            vidiImg.invert().show(getTarget());
         });
 
         $('.actionAutoContrast').on('click',function () {
-            var vidiImg = new Vidi(document.getElementById('src')),
-                target = getTarget();
-
-            vidiImg.autoContrast().show(target);
+            vidiImg.autoContrast().show(getTarget());
+            updateHistograms();
         });
 
         $('.actionToGray').on('click',function () {
-            var vidiImg = new Vidi(document.getElementById('src')),
-                target = getTarget();
-
-            vidiImg.toGray().show(target);
+            vidiImg.toGray().show(getTarget());
         });
 
         $('.actionSobel').on('click',function () {
-            var vidiImg = new Vidi(document.getElementById('src')),
-                target = getTarget();
-
-            vidiImg.sobelEdgeDetect().show(target);
-
-            //vidiImg.contrast(1.5).toGray().customFilter([[-1,0,1],[-2,0,2],[-1,0,1]]).show(target);
-            //vidiImg.contrast(1.5).toGray().customFilter([[-1,-2,-1],[0,0,0],[1,2,1]]).show(target);
+            vidiImg.sobelEdgeDetect().show(getTarget());
         });
 
-        (function () {
-            var vidiImg,
-                target;
+        $('.actionsStats').on('click',function () {
+            var i = 1,
+                j = 0,
+                color,
+                target_colors = 10,
+                colors = Vidi.getColors(vidiImg.imageData),
+                len = colors.length,
+                selected_color = colors[0][0],
+                selected_colors = [selected_color],
+                similar_color;
 
-            $('#slider-contrast').on('slideStart',function () {
-                target = getTarget();
-                vidiImg = new Vidi(document.getElementById('src'))
-                vidiImg.saveSnapshot();
-            });
-
-            $('#slider-contrast').on('slide',function () {
-                var factor = (+$(this).val() + 100) / 100,
-                    lumHistogramCanvas = document.getElementById('lumHistogram'),
-                    rgbHistogramCanvas = document.getElementById('rgbHistogram');
+            while (selected_colors.length < target_colors && i < len) {
+                color = colors[i][0];
 
 
-                vidiImg.contrast(factor).show(target);
+                similar_color = false;
+                for (j=0;j<selected_colors.length;j++) {
+                    selected_color = selected_colors[j];
+                    if (Vidi.getColorsDistance(color,selected_color) < 15) {
+                        similar_color = true;
+                        break;
+                    }
+                }
 
-                lumHistogramCanvas.width = lumHistogramCanvas.width;
-                rgbHistogramCanvas.width = rgbHistogramCanvas.width;
+                if (!similar_color) {
+                    selected_colors.push(color);
+                }
 
-                Vidi.showLuminanceHistogram(vidiImg.imageData,lumHistogramCanvas);
+                i++;
+            }
 
-                Vidi.showRedHistogram(vidiImg.imageData,rgbHistogramCanvas);
-                Vidi.showGreenHistogram(vidiImg.imageData,rgbHistogramCanvas);
-                Vidi.showBlueHistogram(vidiImg.imageData,rgbHistogramCanvas);
+            for (i=0;i<selected_colors.length;i++) {
+                color = selected_colors[i];
+                $('#c'+i).css('background-color','rgba('+color[0]+','+color[1]+','+color[2]+','+color[3]+')')
+            }
+        });
 
-                vidiImg.restoreSnapshot();
-            });
-        }());
+        $('#slider-contrast').on('slideStart',function () {
+            vidiImgTmp = new Vidi(document.getElementById('src'));
+            vidiImgTmp.imageData = vidiImg.imageData;
+            vidiImgTmp.saveSnapshot();
+        });
+
+        $('#slider-contrast').on('slide',function () {
+            var factor = (+$(this).val() + 100) / 100;
+
+            vidiImgTmp.contrast(factor).show(getTarget());
+
+            showHistograms(vidiImgTmp.imageData);
+            vidiImgTmp.restoreSnapshot();
+        });
+
+        loadImage('samples/building.jpg');
     });
 </script>
 </body>
