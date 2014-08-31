@@ -69,10 +69,21 @@ Vidi.prototype.restoreSnapshot = function () {
         return this;
     };
 
+    Vidi.prototype.brightness = function (factor) {
+        this.imageData = Vidi.brightness(this.imageData,factor);
+        return this;
+    };
+
     Vidi.prototype.customFilter = function (filter) {
         this.imageData = Vidi.customFilter(this.imageData,filter);
         return this;
     };
+
+    Vidi.prototype.boxFilter = function (sizeX,sizeY) {
+        this.imageData = Vidi.boxFilter(this.imageData,sizeX,sizeY);
+        return this;
+    };
+
 
 }());
 
