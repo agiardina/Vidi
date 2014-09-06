@@ -14,7 +14,7 @@
     }
 
     function dataSubtract(data1, data2) {
-        var i= 0,
+        var i,
             len = data2.length;
 
         for (i=0;i<len;i=i+4) {
@@ -27,7 +27,7 @@
     }
 
     function dataAdd(data1, data2) {
-        var i= 0,
+        var i,
             len = data2.length;
 
         for (i=0;i<len;i=i+4) {

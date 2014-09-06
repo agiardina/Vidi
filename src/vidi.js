@@ -43,17 +43,6 @@ Vidi.prototype.show = function (target) {
     }
 };
 
-Vidi.prototype.saveSnapshot = function () {
-    this.snapshot = this.context.createImageData(this.imageData.width, this.imageData.height);
-    this.snapshot.data.set(this.imageData.data);
-};
-
-Vidi.prototype.restoreSnapshot = function () {
-    this.imageData = this.context.createImageData(this.snapshot.width, this.snapshot.height);
-    this.imageData.data.set(this.snapshot.data);
-};
-
-
 (function () {
     var actions = ['autoContrast','invert','toGray','sobelEdgeDetect'];
 

@@ -72,19 +72,11 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">File <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#" class="loadImage" data-src="samples/food.jpg">Load food.jpg</a></li>
-                        <li><a href="#" class="loadImage" data-src="samples/paradise.jpg">Load paradise.jpg</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/building.jpg">Load building.jpg</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/lighthouse.jpg">Load lighthouse.jpg</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/boat.jpg">Load boat.jpg</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/mountains.jpg">Load mountains.jpg (big)</a></li>
                         <li><a href="#" class="loadImage" data-src="samples/circle.png">Load circle.png</a></li>
-                        <li><a href="#" class="loadImage" data-src="samples/akira.jpg">Load akira.jpg</a></li>
-                        <li><a href="#" class="loadImage" data-src="samples/test.jpg">Load test.jpg</a></li>
-                        <li><a href="#" class="loadImage" data-src="samples/test.png">Load test.png</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
 
@@ -108,7 +100,6 @@
                         <li><a href="#" class="actionBoxFilter7">Smooth Box Filter (7x7)</a></li>
                         <li><a href="#" class="actionGaussianFilter">Smooth Gaussian Filter (sigma 0.8)</a></li>
                         <li><a href="#" class="actionGaussianFilter2">Smooth Gaussian Filter (sigma 2)</a></li>
-                        <li><a href="#" class="actionDifferenceFilter">Difference Filter</a></li>
                         <li><a href="#" class="actionUnsharpMask">Unsharp Mask</a></li>
                     </ul>
                 </li>
@@ -260,7 +251,7 @@
 
         function showHistograms(imageData) {
             var lumHistogramCanvas = document.getElementById('lumHistogram'),
-                    rgbHistogramCanvas = document.getElementById('rgbHistogram');
+                rgbHistogramCanvas = document.getElementById('rgbHistogram');
 
             lumHistogramCanvas.width = lumHistogramCanvas.width;
             rgbHistogramCanvas.width = rgbHistogramCanvas.width;
@@ -272,8 +263,9 @@
             Vidi.showBlueHistogram(imageData,rgbHistogramCanvas);
         }
 
-        function updateHistograms() {
-            showHistograms(vidiImg.imageData);
+        function updateHistograms(imageData) {
+            imageData = imageData || vidiImg.imageData;
+            showHistograms(imageData);
         }
 
         function closeContrastPanel() {
@@ -290,6 +282,7 @@
 
             vidiCB.imageData = Vidi.cloneImageData(vidiImg.imageData);
             vidiCB.contrast(contrast).brightness(brightness).show(getTarget());
+            updateHistograms(vidiCB.imageData);
         }
 
         $(".slider").slider({});
@@ -321,6 +314,7 @@
 
         $('.actionInvert').on('click',function () {
             vidiImg.invert().show(getTarget());
+            updateHistograms();
         });
 
         $('.actionAutoContrast').on('click',function () {
@@ -330,49 +324,42 @@
 
         $('.actionToGray').on('click',function () {
             vidiImg.toGray().show(getTarget());
+            updateHistograms();
         });
 
         $('.actionSobel').on('click',function () {
             vidiImg.sobelEdgeDetect().show(getTarget());
+            updateHistograms();
         });
 
         $('.actionBoxFilter').on('click',function () {
             vidiImg.boxFilter(3).show(getTarget());
+            updateHistograms();
         });
 
         $('.actionBoxFilter7').on('click',function () {
             vidiImg.boxFilter(7).show(getTarget());
+            updateHistograms();
         });
 
         $('.actionGaussianFilter').on('click',function () {
             vidiImg.imageData = Vidi.gaussianFilter(vidiImg.imageData,0.8);
             vidiImg.show(getTarget());
+            updateHistograms();
         });
 
         $('.actionGaussianFilter2').on('click',function () {
             vidiImg.imageData = Vidi.gaussianFilter(vidiImg.imageData,2);
             vidiImg.show(getTarget());
+            updateHistograms();
         });
 
         $('.actionUnsharpMask').on('click',function () {
             vidiImg.imageData = Vidi.unsharpMask(vidiImg.imageData,10,1);
             vidiImg.show(getTarget());
+            updateHistograms();
         });
 
-        $('.actionDifferenceFilter').on('click',function () {
-            var df2ImageData;
-
-            df2ImageData = Vidi.cloneImageData(vidiImg.imageData);
-            df2ImageData = Vidi.customFilter(df2ImageData,[[0,1,0],
-                                                           [1,-4,1],
-                                                           [0,1,0]]);
-
-            Vidi.dataScale(df2ImageData.data,1);
-            Vidi.dataDiff(vidiImg.imageData.data,df2ImageData.data);
-
-            //vidiImg.imageData = df2ImageData;
-            vidiImg.show(getTarget());
-        });
 
         $('.actionColorPalette').on('click', function() {
             var i,
@@ -399,8 +386,7 @@
         });
 
         $('#panel-contrast .save').on('click', function () {
-            vidiImg.imageData = vidiImgTmp.imageData;
-            vidiImg.show(getTarget());
+            vidiImg.imageData = new Vidi(getTarget()).imageData;
             closeContrastPanel();
         });
 

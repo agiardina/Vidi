@@ -25,9 +25,7 @@ function contrast(imageData,factor) {
 
     factor = +factor; //Cast to number
 
-    if (!(factor >= 0)) {
-        throw "Contrast factor must be a positive number";
-    } else {
+    if (factor >= 0) {
         for (i=0;i<256;i++) {
             lkTable[i] = Math.round(i * factor);
             if (lkTable[i] > 255) {
@@ -43,6 +41,8 @@ function contrast(imageData,factor) {
         }
 
         return imageData;
+    } else {
+        throw "Contrast factor must be a positive number";
     }
 
 }

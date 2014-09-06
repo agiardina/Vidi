@@ -60,7 +60,7 @@ function calculateFilterData(imageData,filter,scale_factor) {
                 data[currPixelStart] = sumR;
                 data[currPixelStart+1] = sumG;
                 data[currPixelStart+2] = sumB;
-                data[currPixelStart+3] = ORIGIN[currPixelStart+3]
+                data[currPixelStart+3] = ORIGIN[currPixelStart+3];
             }
         }
 
@@ -68,38 +68,6 @@ function calculateFilterData(imageData,filter,scale_factor) {
     }
 
 function boxFilter(imageData,sizeX,sizeY) {
-    var kernel = [],
-        scale,
-        row,
-        col;
-
-
-    if (!sizeX) {
-        sizeX = 3;
-    }
-
-    if (!sizeY) {
-        sizeY = sizeX;
-    }
-
-    if (sizeX % 2 !== 1 || sizeY % 2 !==1) {
-        throw "Box filter size must be and odd";
-    }
-
-    scale = sizeX * sizeY;
-
-    for (row=0;row<sizeY;row++) {
-        kernel[row] = [];
-        for (col=0;col<sizeX;col++) {
-            kernel[row][col] = 1;
-        }
-    }
-
-    imageData = customFilter(imageData,kernel,scale);
-    return imageData;
-}
-
-function boxFilterSeparate(imageData,sizeX,sizeY) {
     var kernelX = [],
         kernelY = [],
         scaleX,
@@ -217,7 +185,7 @@ function customFilter(imageData,filter,scale) {
 			data[currPixelStart] = sumR;
 			data[currPixelStart+1] = sumG;
 			data[currPixelStart+2] = sumB;
-			data[currPixelStart+3] = ORIGIN[currPixelStart+3]
+			data[currPixelStart+3] = ORIGIN[currPixelStart+3];
 		}
 	}
 
@@ -301,7 +269,7 @@ function xFilter(imageData,filter,scale) {
                 data[currPixelStart] = sumR;
                 data[currPixelStart+1] = sumG;
                 data[currPixelStart+2] = sumB;
-                data[currPixelStart+3] = ORIGIN[currPixelStart+3]
+                data[currPixelStart+3] = ORIGIN[currPixelStart+3];
             }
         }
 
@@ -389,7 +357,7 @@ function yFilter(imageData,filter,scale) {
                 data[currPixelStart] = sumR;
                 data[currPixelStart+1] = sumG;
                 data[currPixelStart+2] = sumB;
-                data[currPixelStart+3] = ORIGIN[currPixelStart+3]
+                data[currPixelStart+3] = ORIGIN[currPixelStart+3];
             }
         }
 
@@ -416,12 +384,10 @@ function makeGaussianKernel(sigma) {
 
 function gaussianFilter(imageData,sigma) {
     var kernel = makeGaussianKernel(sigma),
-        kernelX,
         kernelY = [],
         scale = 0,
         i;
 
-    kernelX = [kernel];
     for (i=0;i<kernel.length;i++) {
         kernelY.push([kernel[i]]);
         scale = scale + kernel[i];
@@ -432,27 +398,6 @@ function gaussianFilter(imageData,sigma) {
 
     imageData = xFilter(imageData,kernel,scale);
     imageData = yFilter(imageData,kernel,scale);
-
-    return imageData;
-}
-
-function unsharpMaskOld(imageData,sigma,sharpeningFactor) {
-    var smoothImageData = Vidi.cloneImageData(imageData),
-        maskImageData = Vidi.cloneImageData(imageData);
-
-    sigma = sigma || 2;
-    sharpeningFactor  = sharpeningFactor || 0.2;
-
-    var timer = Vidi.timer();
-    smoothImageData = Vidi.gaussianFilter(smoothImageData,sigma);
-    timer.time('gaussian');
-
-    Vidi.dataSubtract(maskImageData.data,smoothImageData.data);
-    timer.time('substract');
-    Vidi.dataScale(maskImageData.data, sharpeningFactor);
-    timer.time('scale');
-    Vidi.dataAdd(imageData.data,maskImageData.data);
-    timer.time('add');
 
     return imageData;
 }
@@ -482,11 +427,10 @@ function unsharpMask(imageData,sigma,a) {
 vidi.customFilter = customFilter;
 vidi.xFilter = xFilter;
 vidi.yFilter = yFilter;
-vidi.boxFilter = boxFilterSeparate;
+vidi.boxFilter = boxFilter;
 vidi.calculateFilterData = calculateFilterData;
 vidi.makeGaussianKernel = makeGaussianKernel;
 vidi.gaussianFilter = gaussianFilter;
 vidi.unsharpMask = unsharpMask;
 
 }(Vidi));
-

@@ -3,9 +3,10 @@
     "use strict";
 
     function getEuclideanRGBDistance (color1, color2) {
-        return Math.sqrt(Math.pow((color1[0]-color2[0]),2)
-            + Math.pow((color1[1]-color2[1]),2)
-            + Math.pow((color1[2]-color2[2]),2));
+        return Math.sqrt(
+                Math.pow((color1[0]-color2[0]),2) +
+                Math.pow((color1[1]-color2[1]),2) +
+                Math.pow((color1[2]-color2[2]),2));
     }
 
     function getColors(imageData) {
@@ -185,8 +186,8 @@
             return [b1,b2];
         }
 
-        function averageColor(b) {
-            var C = b.colors,
+        function averageColor(box) {
+            var C = box.colors,
                 c,
                 n = 0,
                 rSum = 0,
@@ -253,4 +254,5 @@
     }
 
     vidi.findRepresentativeColors = findRepresentativeColors;
+    vidi.getEuclideanRGBDistance = getEuclideanRGBDistance;
 }(Vidi));
