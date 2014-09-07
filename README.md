@@ -16,3 +16,4 @@ vimg.contrast(1.4).show();
 ```
 
 ![Original](docs/img/boat_original.png)
+![Original](docs/img/boat_contrast_40.png)
