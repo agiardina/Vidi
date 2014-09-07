@@ -13,6 +13,6 @@ var img = document.getElementById('myimg'),
     vimg = new Vidi(img);
     
 vimg.contrast(1.4).show();
+```
 
 ![Original](Vidi/blob/master/docs/img/boat_original.png)
-```
