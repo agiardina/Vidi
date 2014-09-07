@@ -13,14 +13,14 @@
 </head>
 <body>
 <div>
-    <img src="samples/building.jpg" id="myimg" style="width: 350px"><img src="samples/building.jpg" id="target" style="width: 350px">
+    <img src="samples/lighthouse.jpg" id="myimg" style="width: 350px"><img src="samples/building.jpg" id="target" style="width: 350px">
 </div>
 <script>
     window.onload = function(){
         var img = document.getElementById('myimg'),
                 vimg = new Vidi(img);
 
-        vimg.invert().show(document.getElementById('target'));
+        vimg.toGray().show(document.getElementById('target'));
     };
 </script>
 </body>

@@ -51,3 +51,14 @@ var img = document.getElementById('myimg'),
 vimg.invert().show();
 ```
 ![Original](docs/img/building_invert.png)
+
+### Conversion to Grayscale
+The toGray function convert an sRGB color image to a grayscale one using the following weights for each color channel: R = 0.309, G = 0.609, B = 0.082
+
+```javascript
+var img = document.getElementById('myimg'),
+    vimg = new Vidi(img);
+
+vimg.toGray().show();
+```
+![Original](docs/img/lighthouse_gray.png)
