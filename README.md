@@ -66,4 +66,11 @@ vimg.toGray().show();
 ### Threshold
 The threshold function separate the pixel values in two classes (black and white) depending upon the threshold value param.
 In this example all the pixel with a luminance value greater than 120 are mapped to white, otherwise to black.
+
+```javascript
+var img = document.getElementById('myimg'),
+    vimg = new Vidi(img);
+
+vimg.threshold(120).show();
+```
 ![Original](docs/img/building_threshold_120.png)
