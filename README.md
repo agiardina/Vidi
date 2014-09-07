@@ -24,11 +24,19 @@ To increase the brightness of an image by 40 points:
 
 ```javascript
 var img = document.getElementById('myimg'),
-        vimg = new Vidi(img);
+    vimg = new Vidi(img);
 
 vimg.brightness(40).show();
 ```
 ![Original](docs/img/lighthouse_brightness_40.png)
 
-### Brightness
+### Autocontrast
 Automatic contrast adjustment (auto-contrast) modify the pixels such that the available range of values is fully covered.
+
+```javascript
+var img = document.getElementById('myimg'),
+    vimg = new Vidi(img);
+
+vimg.autoContrast().show();
+```
+![Original](docs/img/food_autocontrast.png)
