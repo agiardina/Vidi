@@ -40,3 +40,14 @@ var img = document.getElementById('myimg'),
 vimg.autoContrast().show();
 ```
 ![Original](docs/img/food_autocontrast.png)
+
+### Invert
+The invert function reverses the ordering of pixel values: 0 -> 255, 1 -> 254, 2 -> 253, ..., 255 -> 0
+
+```javascript
+var img = document.getElementById('myimg'),
+    vimg = new Vidi(img);
+
+vimg.invert().show();
+```
+![Original](docs/img/building_invert.png)
