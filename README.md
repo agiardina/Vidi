@@ -15,5 +15,5 @@ var img = document.getElementById('myimg'),
 vimg.contrast(1.4).show();
 ```
 
-![Original](docs/img/boat_original.png)
-![Original](docs/img/boat_contrast_40.png)
+![Original](docs/img/boat_small_original.png)
+![Original](docs/img/boat_small_contrast_40.png)
