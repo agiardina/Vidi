@@ -1,6 +1,7 @@
-
-var Vidi = function (source) {
+//Constructor
+var Vidi = function Vidi (source) {
     var image;
+
     this.source = source;
 
     this.canvas = document.createElement('canvas');
@@ -21,12 +22,11 @@ var Vidi = function (source) {
     this.imageData = this.context.getImageData(0,0,this.canvas.width,this.canvas.height);
 };
 
-//Clean the imageData buffer
+//Core functions
 Vidi.prototype.flush = function () {
 	this.imageData = null;
 };
 
-//Target
 Vidi.prototype.show = function (target) {
     var dataURL;
 
@@ -43,36 +43,46 @@ Vidi.prototype.show = function (target) {
     }
 };
 
-(function () {
-    var actions = ['autoContrast','invert','toGray','sobelEdgeDetect'];
 
-    actions.forEach(function (action) {
-        Vidi.prototype[action] = function () {
-            this.imageData = Vidi[action](this.imageData);
-            return this;
-        };
-    });
+//Point Operations
+Vidi.prototype.invert = function () {
+    Vidi.invert(this.imageData);
+    return this;
+};
 
-    Vidi.prototype.contrast = function (factor) {
-        this.imageData = Vidi.contrast(this.imageData,factor);
-        return this;
-    };
+Vidi.prototype.contrast = function (factor) {
+    Vidi.contrast(this.imageData,factor);
+    return this;
+};
 
-    Vidi.prototype.brightness = function (factor) {
-        this.imageData = Vidi.brightness(this.imageData,factor);
-        return this;
-    };
+Vidi.prototype.autoContrast = function () {
+    Vidi.autoContrast(this.imageData);
+    return this;
+};
 
-    Vidi.prototype.customFilter = function (filter) {
-        this.imageData = Vidi.customFilter(this.imageData,filter);
-        return this;
-    };
+Vidi.prototype.brightness = function (factor) {
+    Vidi.brightness(this.imageData,factor);
+    return this;
+};
 
-    Vidi.prototype.boxFilter = function (sizeX,sizeY) {
-        this.imageData = Vidi.boxFilter(this.imageData,sizeX,sizeY);
-        return this;
-    };
+Vidi.prototype.toGray = function () {
+    Vidi.toGray(this.imageData);
+    return this;
+};
+
+Vidi.prototype.threshold = function (level) {
+    Vidi.threshold(this.imageData,level);
+    return this;
+};
 
 
-}());
+//Filters
+Vidi.prototype.customFilter = function (filter) {
+    Vidi.customFilter(this.imageData,filter);
+    return this;
+};
 
+Vidi.prototype.boxFilter = function (sizeX,sizeY) {
+    Vidi.boxFilter(this.imageData,sizeX,sizeY);
+    return this;
+};

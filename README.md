@@ -62,3 +62,8 @@ var img = document.getElementById('myimg'),
 vimg.toGray().show();
 ```
 ![Original](docs/img/lighthouse_gray.png)
+
+### Threshold
+The threshold function separate the pixel values in two classes (black and white) depending upon the threshold value param.
+In this example all the pixel with a luminance value greater than 120 are mapped to white, otherwise to black.
+![Original](docs/img/building_threshold_120.png)
