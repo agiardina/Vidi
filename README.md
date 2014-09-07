@@ -29,3 +29,6 @@ var img = document.getElementById('myimg'),
 vimg.brightness(40).show();
 ```
 ![Original](docs/img/lighthouse_brightness_40.png)
+
+### Brightness
+Automatic contrast adjustment (auto-contrast) modify the pixels such that the available range of values is fully covered.
